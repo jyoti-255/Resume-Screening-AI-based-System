@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Category Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .upload-section, .result-section {
+            background: #013a5c;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            input[type="file"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="upload-section">
+            <h1>Resume Screening AI-based System</h1>
+            <p>This system supports TXT and PDF files. You can upload your resume for:</p>
+            <ul>
+                <li>Resume Categorization</li>
+                <li>Resume Job Recommendation</li>
+                <li>Resume Parsing (Information Extraction)</li>
+            </ul>
+        </div>
+
+        <div class="upload-section">
+            <h2>Upload Your Resume</h2>
+            <form action="/pred" method="post" enctype="multipart/form-data">
+                <input type="file" name="resume" accept=".pdf, .txt" required>
+                <input type="submit" value="Submit">
+            </form>
+
+            {% if message %}
+            <p class="text-center">{{message}}</p>
+            {% endif %}
+        </div>
+
+        {% if predicted_category %}
+        <div class="result-section">
+            <h2>Results</h2>
+            <p><strong>Category:</strong> {{predicted_category}}</p>
+            <p><strong>Recommended Job:</strong> {{recommended_job}}</p>
+
+            <hr>
+            <h2>Extracted Information</h2>
+            <p><strong>Name:</strong> {{name}}</p>
+            <p><strong>Phone No:</strong> {{phone}}</p>
+            <p><strong>Email:</strong> {{email}}</p>
+
+            {% if extracted_skills %}
+            <p><strong>Skills</strong></p>
+            <ul>
+                {% for skill in extracted_skills %}
+                <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No skills found</p>
+            {% endif %}
+
+            {% if extracted_education %}
+            <h2>Education</h2>
+            <ul>
+                {% for edu in extracted_education %}
+                <li>{{ edu }}</li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No education found</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+
+</html>
